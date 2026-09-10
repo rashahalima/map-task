@@ -5,40 +5,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <link rel="stylesheet" href="/css/style.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-     crossorigin=""/>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+      crossorigin=""
+    />
   </head>
   <body>
-     <!-- <div id="map"></div> -->
-      <form id="main-form">
-        <label for="fname">First Name</label>
-        <input type="text" id="fname">
-        <br>
-        <label for="lname">Last Name</label>
-        <input type="text" id="lname">
-        <br>
-        <label >Gender</label><br>
-        <input type="radio" id="male" name="gender" value="MALE">
-        <label for="male">Male</label><br>
-        <input type="radio" id="female" name="gender" value="FEMALE">
-        <label for="female">Female</label>
-        <br>
-        <label for="age">Age</label>
-        <input type="text" id="age">
-        <br>
-        <label for="lat">Latitude</label>
-        <input type="text" id="lat">
-        <label for="lon">longitude</label>
-        <input type="text" id="lon"><br>
-        <button id="add">Add</button>
-        <button id="draw">Draw</button>
-      </form>
+    <div id="map"></div>
+    <form id="main-form">
+      <label for="fname">First Name</label>
+      <input type="text" id="fname" />
+      <br />
+      <label for="lname">Last Name</label>
+      <input type="text" id="lname" />
+      <br />
+      <label>Gender</label><br />
+      <input type="radio" id="male" name="gender" value="MALE" />
+      <label for="male">Male</label><br />
+      <input type="radio" id="female" name="gender" value="FEMALE" />
+      <label id="f" for="female">Female</label>
+      <br />
+      <label for="age">Age</label>
+      <input type="text" id="age" />
+      <br />
+      <label for="lat">Latitude</label>
+      <input type="text" id="lat" />
+      <label for="lon">longitude</label>
+      <input type="text" id="lon" /><br />
+      <button id="add">Add</button>
+      <button id="draw">Draw</button>
+    </form>
 
- <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-     crossorigin=""></script>
-    <script src="/js/lib.js"></script>
-    <script src="/js/main.js"></script>
+    <script
+      src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+      crossorigin=""
+    ></script>
+    <script type="module" src="./js/lib.js"></script>
+    <script src="./js/main.js"></script>
   </body>
 </html>

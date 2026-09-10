@@ -1,16 +1,20 @@
-#map{
-    border:1px solid black;
-    height: 600px;
-    width: 100%;
+#map {
+  border: 1px solid black;
+  height: 600px;
+  width: 100%;
 }
-#main-form{
-    display: block;
-    padding: 20px;
-    border: 2px solid black;
+#main-form {
+  display: block;
+  padding: 20px;
+  border: 2px solid black;
 }
-input{
-    margin: 5px;
+input {
+  margin: 5px;
 }
-button{
-    margin: 5px;
+button {
+  padding: 10px;
+  font-size: 15px;
+
+  background-color: rgb(183, 183, 224);
+  margin: 5px;
 }
