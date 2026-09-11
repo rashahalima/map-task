@@ -69,9 +69,13 @@ import { Person } from "./Person.js";
 
 //}
 //M1 _______________________________________________________________
-export const outoZoom = (pPoints) => {
-  
-  const points = pPoints.map((e) => [e.lon, e.lat]);
+export const outoZoom = (pPoints, map) => {
+  // the points are empty or not ??
+  if (!pPoints || pPoints.length === 0) return;
+
+
+  // [e.lon, e.lat] X
+  const points = pPoints.map((e) => [e.lat, e.lon]);
   
   
   // const points = [
@@ -99,7 +103,8 @@ export const outoZoom = (pPoints) => {
   // 4. add the circcle 
   const cerrcil = L.circle(center, {
     radius: longest,
-    color: "",
+    // color: "",
+    color: false,
     fillOpacity: 0,
   }).addTo(map);
 
@@ -111,8 +116,8 @@ export const outoZoom = (pPoints) => {
   // console.log(center);
 
   // 7. add the polygon
-  const maleP = pPoints.filter((e) => e.gender === "male").map((e) => [e.lon, e.lat]);
-  const femaleP = pPoints.filter((e) => e.gender === "female").map((e) => [e.lon, e.lat]);
+  const maleP = pPoints.filter((e) => e.gender === "MALE").map((e) => [e.lat, e.lon]);
+  const femaleP = pPoints.filter((e) => e.gender === "FEMALE").map((e) => [e.lat, e.lon]);
 
   // const malePolygon =
   L.polygon(maleP, {

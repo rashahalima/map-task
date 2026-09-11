@@ -1,4 +1,4 @@
-// import { outoZoom, tackTheData } from "./lib.js";
+import { outoZoom } from "./lib.js";
 
 const form = document.getElementById("main-form");
 
@@ -24,9 +24,11 @@ polygon.bindPopup("I am a polygon.");
 draw.addEventListener("click", () => {
   form.style.display = "none";
   document.getElementById("map").style.display = "block";
-
   map.invalidateSize();
+  // ======
+  outoZoom(persons, map);
+  // ======
 });
 // const persons = tackTheData();
-// outoZoom(persons);
+// outoZoom(persons, map);
 // tackTheData();
