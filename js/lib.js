@@ -116,22 +116,24 @@ export const outoZoom = (pPoints, map) => {
   // console.log(center);
 
   // 7. add the polygon
-  const maleP = pPoints.filter((e) => e.gender === "MALE").map((e) => [e.lat, e.lon]);
-  const femaleP = pPoints.filter((e) => e.gender === "FEMALE").map((e) => [e.lat, e.lon]);
 
-  // const malePolygon =
-  L.polygon(maleP, {
-    color: "blue",
-    fillColor: "#add8e6",
-    fillOpacity: 0.5,
-  }).addTo(map);
+  // sorry Karam -_- 
+  // const maleP = pPoints.filter((e) => e.gender === "MALE").map((e) => [e.lat, e.lon]);
+  // const femaleP = pPoints.filter((e) => e.gender === "FEMALE").map((e) => [e.lat, e.lon]);
 
-  // const femalePolygon =
-  L.polygon(femaleP, {
-    color: "pink",
-    fillColor: "#e80326",
-    fillOpacity: 0.5,
-  }).addTo(map);
+  // // const malePolygon =
+  // L.polygon(maleP, {
+  //   color: "blue",
+  //   fillColor: "#add8e6",
+  //   fillOpacity: 0.5,
+  // }).addTo(map);
+
+  // // const femalePolygon =
+  // L.polygon(femaleP, {
+  //   color: "pink",
+  //   fillColor: "#e80326",
+  //   fillOpacity: 0.5,
+  // }).addTo(map);
 
 
 
