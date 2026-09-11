@@ -1,3 +1,5 @@
+// import { outoZoom, tackTheData } from "./lib.js";
+
 const form = document.getElementById("main-form");
 
 var map = L.map("map").setView([51.505, -0.09], 13);
@@ -25,3 +27,6 @@ draw.addEventListener("click", () => {
 
   map.invalidateSize();
 });
+// const persons = tackTheData();
+// outoZoom(persons);
+// tackTheData();
