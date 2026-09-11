@@ -14,9 +14,10 @@ const lon = document.getElementById("lon");
 
 const add = document.getElementById("add");
 const draw = document.getElementById("draw");
+const persons=[];
 const males=[];
 const females=[];
-add.addEventListener("click", (e) => {
+add.addEventListener("submit", (e) => {
     e.preventDefault();
 
     let gender;
@@ -26,7 +27,6 @@ add.addEventListener("click", (e) => {
     } else if (female.checked) {
         gender = female.value;
     }
-
     const person = new Person(
         fname.value,
         lname.value,
@@ -35,9 +35,12 @@ add.addEventListener("click", (e) => {
         lon.value,
         lat.value
     );
+    persons.push(person);
     if(person.gender=='MALE'){
         males.push(person);
     }else{
         females.push(person);
     }
+    console.log(females);
+    console.log(males);
 });
