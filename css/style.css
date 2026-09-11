@@ -1,6 +1,6 @@
 #map {
-  border: 1px solid black;
-  height: 600px;
+  display: none;
+  height: 500px;
   width: 100%;
 }
 #main-form {
