@@ -21,6 +21,17 @@ var polygon = L.polygon([
 marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
 polygon.bindPopup("I am a polygon.");
 
+var popup = L.popup();
+
+function onMapClick(e) {
+    popup
+        .setLatLng(e.latlng)
+        .setContent("You clicked the map at " + e.latlng.toString())
+        .openOn(map);
+}
+
+map.on("click", onMapClick);
+
 draw.addEventListener("click", () => {
   form.style.display = "none";
   document.getElementById("map").style.display = "block";
