@@ -17,7 +17,7 @@ const draw = document.getElementById("draw");
 const persons=[];
 const males=[];
 const females=[];
-add.addEventListener("submit", (e) => {
+form.addEventListener("submit", (e) => {
     e.preventDefault();
 
     let gender;
