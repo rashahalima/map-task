@@ -14,12 +14,17 @@ import { Person } from "./Person.js";
 
   const add = document.getElementById("add");
 
-  const draw = document.getElementById("draw");
+  // const draw = document.getElementById("draw");
   const mapElement = document.getElementById("map");
   mapElement.style.display = "none";
-  const persons = [];
-  const males = [];
-  const females = [];
+  // const persons = [];
+  // const males = [];
+  // const females = [];
+  export const draw = document.getElementById("draw");
+
+export const persons = [];
+export const males = [];
+export const females = [];
   const MIN_PERSONS = 6;
 
   form.addEventListener("submit", (e) => {

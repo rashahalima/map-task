@@ -1,5 +1,55 @@
-import { outoZoom } from "./lib.js";
+// import { outoZoom } from "./lib.js";
+import { outoZoom, persons, draw } from "./lib.js";
+///////////////////////////////
 
+///////////////////////////////////////////
+
+function method4(winners, losers, map) {
+  const center = map.getCenter();
+  let farthestWinner = winners[0];
+
+  for (const person of winners) {
+    const currentDistance = center.distanceTo(
+      L.latLng(person.lat, person.lon)
+    );
+
+    const farthestDistance = center.distanceTo(
+      L.latLng(farthestWinner.lat, farthestWinner.lon)
+    );
+
+    if (currentDistance > farthestDistance) {
+      farthestWinner = person;
+    }
+  }
+
+  let youngestLoser = losers[0];
+
+  for (const person of losers) {
+    if (Number(person.age) < Number(youngestLoser.age)) {
+      youngestLoser = person;
+    }
+  }
+
+  L.marker([farthestWinner.lat, farthestWinner.lon])
+    .addTo(map)
+    .bindPopup(`
+      <b>Winner</b><br>
+      Name: ${farthestWinner.fname} ${farthestWinner.lname}<br>
+      Age: ${farthestWinner.age}<br>
+      Gender: ${farthestWinner.gender}
+    `)
+    .openPopup();
+
+  L.marker([youngestLoser.lat, youngestLoser.lon])
+    .addTo(map)
+    .bindPopup(`
+      <b>Loser</b><br>
+      Name: ${youngestLoser.fname} ${youngestLoser.lname}<br>
+      Age: ${youngestLoser.age}<br>
+      Gender: ${youngestLoser.gender}
+    `);
+}
+///////////////////////////////////////
 const form = document.getElementById("main-form");
 
 var map = L.map("map").setView([51.505, -0.09], 13);
@@ -25,6 +75,14 @@ draw.addEventListener("click", () => {
   form.style.display = "none";
   document.getElementById("map").style.display = "block";
   map.invalidateSize();
+
+  /////هون الاستدعاء
+  // const result = method2();
+
+  // method4(result.winners, result.losers, map);
+
+  ////
+
   // ======
   outoZoom(persons, map);
   // ======
