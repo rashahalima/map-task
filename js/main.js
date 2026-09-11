@@ -8,15 +8,15 @@ L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
     '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
 }).addTo(map);
 
-var marker = L.marker([51.5, -0.09]).addTo(map);
+// var marker = L.marker([51.5, -0.09]).addTo(map);
 
-var polygon = L.polygon([
-  [51.509, -0.08],
-  [51.503, -0.06],
-  [51.51, -0.047],
-]).addTo(map);
+// var polygon = L.polygon([
+//   [51.509, -0.08],
+//   [51.503, -0.06],
+//   [51.51, -0.047],
+// ]).addTo(map);
 
-marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
+// marker.bindPopup("<b>Hello world!</b><br>I am a popup.").openPopup();
 polygon.bindPopup("I am a polygon.");
 
 draw.addEventListener("click", () => {
@@ -25,3 +25,4 @@ draw.addEventListener("click", () => {
 
   map.invalidateSize();
 });
+

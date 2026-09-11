@@ -63,3 +63,94 @@ form.addEventListener("submit", (e) => {
     draw.disabled = false;
   }
 });
+
+draw.addEventListener("click", (e) => {
+  mapElement.style.display = "block"; 
+  form.style.display="none";
+  const maleCoords = males.map(person => {
+      const latLng = [parseFloat(person.lat), parseFloat(person.lon)];
+            L.marker(latLng)
+       .bindPopup(`<b>${person.fname} ${person.lname}</b><br>Gender: Male<br>Age: ${person.age}`)
+       .addTo(map);
+
+      return latLng;
+  });
+
+  const femaleCoords = females.map(person => {
+      const latLng = [parseFloat(person.lat), parseFloat(person.lon)];
+      
+      L.marker(latLng)
+       .bindPopup(`<b>${person.fname} ${person.lname}</b><br>Gender: Female<br>Age: ${person.age}`)
+       .addTo(map);
+
+      return latLng;
+  });
+
+      const malePolygon = L.polygon(maleCoords, {
+          color: '#007bff',
+          fillColor: '#007bff',
+          fillOpacity: 0.4
+      }).addTo(map);
+
+      const maleArea = calculatePolygonArea(maleCoords);
+      malePolygon.bindPopup(`<b>Males Polygon/b><br>Size: ${maleArea.toFixed(2)} Km²`).openPopup();
+
+      const femalePolygon = L.polygon(femaleCoords, {
+          color: '#ff4d94',  
+          fillColor: '#ff4d94',
+          fillOpacity: 0.4
+      }).addTo(map);
+
+      const femaleArea = calculatePolygonArea(femaleCoords);
+      femalePolygon.bindPopup(`<b>Females Polygon/b><br>Size: ${femaleArea.toFixed(2)} Km²`);
+      setTimeout(() => {
+      map.invalidateSize();
+  }, 100); 
+   return femaleArea>maleArea ? [females,males] : [males,females];
+});
+
+function calculatePolygonArea(coords) {
+    let area = 0;
+    const R = 6378.137;
+    if (coords.length > 2) {
+        for (let i = 0; i < coords.length; i++) {
+            let p1 = coords[i];
+            let p2 = coords[(i + 1) % coords.length];
+            let lat1 = p1[0] * Math.PI / 180;
+            let lat2 = p2[0] * Math.PI / 180;
+            let lon1 = p1[1] * Math.PI / 180;
+            let lon2 = p2[1] * Math.PI / 180;
+            area += (lon2 - lon1) * (2 + Math.sin(lat1) + Math.sin(lat2));
+        }
+        area = area * R * R / 2;
+    }
+    return Math.abs(area);
+}
+
+const btnTest = document.getElementById("btn-test");
+
+if (btnTest) {
+  btnTest.addEventListener("click", () => {
+    const testMales = [
+      new Person("Ahmed", "Ali", "MALE", "25", "-0.09", "51.515"),
+      new Person("Khaled", "Omar", "MALE", "30", "-0.06", "51.520"),
+      new Person("Omar", "Hassan", "MALE", "28", "-0.05", "51.505")
+    ];
+    const testFemales = [
+      new Person("Sara", "Ahmed", "FEMALE", "22", "-0.09", "51.495"),
+      new Person("Reem", "Zaid", "FEMALE", "27", "-0.1", "51.490"),
+      new Person("Layla", "Murad", "FEMALE", "24", "-0.04", "51.500")
+    ];
+
+    testMales.forEach(p => { persons.push(p); males.push(p); });
+    testFemales.forEach(p => { persons.push(p); females.push(p); });
+
+    console.log("Males:", males);
+    console.log("Females:", females);
+
+    draw.disabled = false;
+    
+    btnTest.textContent = "Done";
+    btnTest.disabled = true;
+  });
+}
