@@ -1,5 +1,12 @@
 import { Person } from "./Person.js";
+import { Result } from "./Result.js";
 
+export const map = L.map("map").setView([51.505, -0.09], 13);
+
+L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  maxZoom: 19,
+  attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+}).addTo(map);
 const form = document.getElementById("main-form");
 
 const fname = document.getElementById("fname");
@@ -21,7 +28,7 @@ const persons = [];
 const males = [];
 const females = [];
 const MIN_PERSONS = 6;
-
+let result;
 form.addEventListener("submit", (e) => {
   e.preventDefault();
 
@@ -106,7 +113,8 @@ draw.addEventListener("click", (e) => {
       setTimeout(() => {
       map.invalidateSize();
   }, 100); 
-   return femaleArea>maleArea ? [females,males] : [males,females];
+  femaleArea>maleArea ? result=new Result(females,males) : result=new Result(males,females);
+  // console.log(result.winners);
 });
 
 function calculatePolygonArea(coords) {
@@ -153,4 +161,8 @@ if (btnTest) {
     btnTest.textContent = "Done";
     btnTest.disabled = true;
   });
+}
+
+export const getResult=()=>{
+  return result;
 }
