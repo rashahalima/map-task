@@ -207,53 +207,68 @@ export const dPop = (result, map) => {
     `);
 }
 draw.addEventListener("click", (e) => {
-  mapElement.style.display = "block"; 
-  form.style.display="none";
-  const maleCoords = males.map(person => {
-      const latLng = [parseFloat(person.lat), parseFloat(person.lon)];
-            L.marker(latLng)
-       .bindPopup(`<b>${person.fname} ${person.lname}</b><br>Gender: Male<br>Age: ${person.age}`)
-       .addTo(map);
+    mapElement.style.display = "block";
+    form.style.display = "none";
 
-      return latLng;
-  });
+    const maleCoords = males.map(person => {
+        const latLng = [parseFloat(person.lat), parseFloat(person.lon)];
+        L.marker(latLng)
+         .bindPopup(`<b>${person.fname} ${person.lname}</b><br>Gender: Male<br>Age: ${person.age}`)
+         .addTo(map);
+        return latLng;
+    });
 
-  const femaleCoords = females.map(person => {
-      const latLng = [parseFloat(person.lat), parseFloat(person.lon)];
-      
-      L.marker(latLng)
-       .bindPopup(`<b>${person.fname} ${person.lname}</b><br>Gender: Female<br>Age: ${person.age}`)
-       .addTo(map);
+    const femaleCoords = females.map(person => {
+        const latLng = [parseFloat(person.lat), parseFloat(person.lon)];
+        L.marker(latLng)
+         .bindPopup(`<b>${person.fname} ${person.lname}</b><br>Gender: Female<br>Age: ${person.age}`)
+         .addTo(map);
+        return latLng;
+    });
 
-      return latLng;
-  });
+    const malePolygon = L.polygon(maleCoords, { 
+        color: '#007bff', 
+        fillColor: '#007bff', 
+        fillOpacity: 0.4,
+        interactive: true 
+    }).addTo(map);
+    
+    const maleArea = calculatePolygonArea(maleCoords);
+    malePolygon.bindPopup(`<b>Males Polygon</b><br>Size: ${maleArea.toFixed(2)} Km²`); 
 
-      const malePolygon = L.polygon(maleCoords, {
-          color: '#007bff',
-          fillColor: '#007bff',
-          fillOpacity: 0.4
-      }).addTo(map);
+    const femalePolygon = L.polygon(femaleCoords, { 
+        color: '#ff4d94', 
+        fillColor: '#ff4d94', 
+        fillOpacity: 0.4,
+        interactive: true
+    }).addTo(map);
+    
+    const femaleArea = calculatePolygonArea(femaleCoords);
+    femalePolygon.bindPopup(`<b>Females Polygon</b><br>Size: ${femaleArea.toFixed(2)} Km²`);
 
-      const maleArea = calculatePolygonArea(maleCoords);
-      malePolygon.bindPopup(`<b>Males Polygon/b><br>Size: ${maleArea.toFixed(2)} Km²`).openPopup();
+    malePolygon.on('click', function(e) {
+        this.bringToFront();
+        this.openPopup();
+    });
 
-      const femalePolygon = L.polygon(femaleCoords, {
-          color: '#ff4d94',  
-          fillColor: '#ff4d94',
-          fillOpacity: 0.4
-      }).addTo(map);
+    femalePolygon.on('click', function(e) {
+        this.bringToFront();
+        this.openPopup();
+    });
 
-      const femaleArea = calculatePolygonArea(femaleCoords);
-      femalePolygon.bindPopup(`<b>Females Polygon/b><br>Size: ${femaleArea.toFixed(2)} Km²`);
-      setTimeout(() => {
-      map.invalidateSize();
-      autoZoom(persons,map);
-  }, 200); 
-  femaleArea>maleArea ? result=new Result(females,males) : result=new Result(males,females);
-  dPop(result,map);
-  autoZoom(persons,map);
-  // console.log(result.winners);
+    malePolygon.bringToFront();
+    malePolygon.openPopup();
+
+    setTimeout(() => {
+        map.invalidateSize();
+        autoZoom(persons, map);
+    }, 200);
+
+    femaleArea > maleArea ? result = new Result(females, males) : result = new Result(males, females);
+    dPop(result, map);
+    autoZoom(persons, map);
 });
+
 
 const calculatePolygonArea=(coords)=> {
     let area = 0;
