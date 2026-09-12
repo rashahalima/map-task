@@ -146,3 +146,57 @@ export const outoZoom = (pPoints, map) => {
   map.setView(center, sZoom);
 }
 //_______________________________________________________________________________
+//M3
+const popupMapClick = (person, map) => {
+  popup
+    .setLatLng(person.latlng)
+    .setContent("You clicked the map at " + person.latlng.toString())
+    .openOn(map);
+}
+_______________________________________________________________________________
+//M4
+const dPop = (result, map) => {
+  const center = map.getCenter();
+  let farthestWinner = result.winners[0];
+
+  for (const person of result.winners) {
+    const currentDistance = center.distanceTo(
+      L.latLng(person.lat, person.lon)
+    );
+
+    const farthestDistance = center.distanceTo(
+      L.latLng(farthestWinner.lat, farthestWinner.lon)
+    );
+
+    if (currentDistance > farthestDistance) {
+      farthestWinner = person;
+    }
+  }
+
+  let youngestLoser = result.losers[0];
+
+  for (const person of result.losers) {
+    if (Number(person.age) < Number(youngestLoser.age)) {
+      youngestLoser = person;
+    }
+  }
+
+  L.marker([farthestWinner.lat, farthestWinner.lon])
+    .addTo(map)
+    .bindPopup(`
+      <b>Winner</b><br>
+      Name: ${farthestWinner.fname} ${farthestWinner.lname}<br>
+      Age: ${farthestWinner.age}<br>
+      Gender: ${farthestWinner.gender}
+    `)
+    .openPopup();
+
+  L.marker([youngestLoser.lat, youngestLoser.lon])
+    .addTo(map)
+    .bindPopup(`
+      <b>Loser</b><br>
+      Name: ${youngestLoser.fname} ${youngestLoser.lname}<br>
+      Age: ${youngestLoser.age}<br>
+      Gender: ${youngestLoser.gender}
+    `);
+}
