@@ -266,7 +266,7 @@ draw.addEventListener("click", (e) => {
 
     femaleArea > maleArea ? result = new Result(females, males) : result = new Result(males, females);
     dPop(result, map);
-    autoZoom(persons, map);
+  // autoZoom(persons, map);
 });
 
 
