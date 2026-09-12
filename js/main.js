@@ -3,7 +3,20 @@ import { outoZoom, persons, draw } from "./lib.js";
 ///////////////////////////////
 
 ///////////////////////////////////////////
+//
 
+const winnersPolygon = L.polygon(
+  result.winners.map(person => [
+    Number(person.lat),
+    Number(person.lon)
+  ]),
+  {
+    color: "green",
+    fillColor: "green",
+    fillOpacity: 0.4
+  }
+).addTo(map);
+//
 function method4(winners, losers, map) {
   const center = map.getCenter();
   let farthestWinner = winners[0];
