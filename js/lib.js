@@ -70,13 +70,13 @@ form.addEventListener("submit", (e) => {
       draw.disabled = false;
     }
 
-    // outoZoom(persons);
+    // autoZoom(persons);
     
   });
 
 //}
 //M1 _______________________________________________________________
-export const outoZoom = (pPoints, map) => {
+export const autoZoom = (pPoints, map) => {
   // the points are empty or not ??
   if (!pPoints || pPoints.length === 0) return;
 
@@ -247,11 +247,11 @@ draw.addEventListener("click", (e) => {
   }, 100); 
   femaleArea>maleArea ? result=new Result(females,males) : result=new Result(males,females);
   dPop(result,map);
-  outoZoom(persons,map);
+  autoZoom(persons,map);
   // console.log(result.winners);
 });
 
-function calculatePolygonArea(coords) {
+const calculatePolygonArea=(coords)=> {
     let area = 0;
     const R = 6378.137;
     if (coords.length > 2) {
