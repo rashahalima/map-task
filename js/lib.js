@@ -9,17 +9,17 @@ L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
 }).addTo(map);
 const form = document.getElementById("main-form");
 
-const fname = document.getElementById("fname");
-const lname = document.getElementById("lname");
+  const fname = document.getElementById("fname");
+  const lname = document.getElementById("lname");
 
-const male = document.getElementById("male");
-const female = document.getElementById("female");
+  const male = document.getElementById("male");
+  const female = document.getElementById("female");
 
-const age = document.getElementById("age");
-const lat = document.getElementById("lat");
-const lon = document.getElementById("lon");
+  const age = document.getElementById("age");
+  const lat = document.getElementById("lat");
+  const lon = document.getElementById("lon");
 
-const add = document.getElementById("add");
+  const add = document.getElementById("add");
 
 const draw = document.getElementById("draw");
 const mapElement = document.getElementById("map");
@@ -32,45 +32,177 @@ let result;
 form.addEventListener("submit", (e) => {
   e.preventDefault();
 
-  let gender;
+    let gender;
 
-  if (male.checked) {
-    gender = male.value;
-  } else if (female.checked) {
-    gender = female.value;
+    if (male.checked) {
+      gender = male.value;
+    } else if (female.checked) {
+      gender = female.value;
+    }
+
+    const person = new Person(
+      fname.value,
+      lname.value,
+      gender,
+      age.value,
+      lon.value,
+      lat.value,
+    );
+
+    persons.push(person);
+
+    if (person.gender === "MALE") {
+      males.push(person);
+    } else {
+      females.push(person);
+    }
+
+    console.log("Persons:", persons);
+    console.log("Males:", males);
+    console.log("Females:", females);
+
+    form.reset();
+    if (
+      persons.length >= MIN_PERSONS &&
+      males.length >= 3 &&
+      females.length >= 3
+    ) {
+      draw.disabled = false;
+    }
+
+    // outoZoom(persons);
+    
+  });
+
+//}
+//M1 _______________________________________________________________
+export const outoZoom = (pPoints, map) => {
+  // the points are empty or not ??
+  if (!pPoints || pPoints.length === 0) return;
+
+
+  // [e.lon, e.lat] X
+  const points = pPoints.map((e) => [e.lat, e.lon]);
+  
+  
+  // const points = [
+  //   [51.505, -0.09],
+  //   [35, 43],
+  //   [55, 46],
+  //   [60, 71],
+  // ];
+
+
+  // 1. covert all the points to leaflet latlng
+  const leafletLatLngs = points.map((e) => L.latLng(e));
+
+  // 2. made the haypthicl bounds
+  const test = L.latLngBounds(leafletLatLngs);
+  const center = test.getCenter();
+
+  // the longest distance F the center 
+  const longest = points.reduce((acc, currentPoint) => {
+    const currentDistance = center.distanceTo(L.latLng(currentPoint));
+    return currentDistance > acc ? currentDistance : acc;
+  }, 0);
+  // console.log(longest);
+
+  // 4. add the circcle 
+  const cerrcil = L.circle(center, {
+    radius: longest,
+    // color: "",
+    color: false,
+    fillOpacity: 0,
+  }).addTo(map);
+
+  // 5. tack the bounds of the circle 
+  const circleBounds = cerrcil.getBounds();
+
+  // 6. mack it as the zoom level 
+  const sZoom = map.getBoundsZoom(circleBounds);
+  // console.log(center);
+
+  // 7. add the polygon
+
+  // sorry Karam -_- 
+  // const maleP = pPoints.filter((e) => e.gender === "MALE").map((e) => [e.lat, e.lon]);
+  // const femaleP = pPoints.filter((e) => e.gender === "FEMALE").map((e) => [e.lat, e.lon]);
+
+  // // const malePolygon =
+  // L.polygon(maleP, {
+  //   color: "blue",
+  //   fillColor: "#add8e6",
+  //   fillOpacity: 0.5,
+  // }).addTo(map);
+
+  // // const femalePolygon =
+  // L.polygon(femaleP, {
+  //   color: "pink",
+  //   fillColor: "#e80326",
+  //   fillOpacity: 0.5,
+  // }).addTo(map);
+
+
+
+  // 8. view the map 
+  map.setView(center, sZoom);
+}
+//_______________________________________________________________________________
+// M3
+// const popupMapClick = (person, map) => {
+//   popup
+//     .setLatLng(person.latlng)
+//     .setContent("You clicked the map at " + person.latlng.toString())
+//     .openOn(map);
+// }
+//_______________________________________________________________________________
+//M4
+export const dPop = (result, map) => {
+  const center = map.getCenter();
+  let farthestWinner = result.winners[0];
+  
+
+  for (const person of result.winners) {
+    const currentDistance = center.distanceTo(
+      L.latLng(person.lat, person.lon)
+    );
+
+    const farthestDistance = center.distanceTo(
+      L.latLng(farthestWinner.lat, farthestWinner.lon)
+    );
+
+    if (currentDistance > farthestDistance) {
+      farthestWinner = person;
+      console.log(farthestWinner);
+    }
   }
 
-  const person = new Person(
-    fname.value,
-    lname.value,
-    gender,
-    age.value,
-    lon.value,
-    lat.value,
-  );
+  let youngestLoser = result.losers[0];
 
-  persons.push(person);
-
-  if (person.gender === "MALE") {
-    males.push(person);
-  } else {
-    females.push(person);
+  for (const person of result.losers) {
+    if (Number(person.age) < Number(youngestLoser.age)) {
+      youngestLoser = person;
+    }
   }
 
-  console.log("Persons:", persons);
-  console.log("Males:", males);
-  console.log("Females:", females);
+  L.marker([farthestWinner.lat, farthestWinner.lon])
+    .bindPopup(`
+      <b>Winner</b><br>
+      Name: ${farthestWinner.fname} ${farthestWinner.lname}<br>
+      Age: ${farthestWinner.age}<br>
+      Gender: ${farthestWinner.gender}
+    `).addTo(map)
+    .openPopup();
 
-  form.reset();
-  if (
-    persons.length >= MIN_PERSONS &&
-    males.length >= 3 &&
-    females.length >= 3
-  ) {
-    draw.disabled = false;
-  }
-});
-
+  L.marker([youngestLoser.lat, youngestLoser.lon])
+    .addTo(map)
+    .bindPopup(`
+      <b>Loser</b><br>
+      Name: ${youngestLoser.fname} ${youngestLoser.lname}<br>
+      Age: ${youngestLoser.age}<br>
+      Gender: ${youngestLoser.gender}
+    `).openPopup();
+}
 draw.addEventListener("click", (e) => {
   mapElement.style.display = "block"; 
   form.style.display="none";
@@ -114,6 +246,8 @@ draw.addEventListener("click", (e) => {
       map.invalidateSize();
   }, 100); 
   femaleArea>maleArea ? result=new Result(females,males) : result=new Result(males,females);
+  dPop(result,map);
+  outoZoom(persons,map);
   // console.log(result.winners);
 });
 
