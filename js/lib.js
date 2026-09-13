@@ -160,23 +160,42 @@ export const autoZoom = (pPoints, map) => {
 // }
 //_______________________________________________________________________________
 //M4
+// M4
 export const dPop = (result, map) => {
-  const center = map.getCenter();
+  if (!result || result.winners.length === 0 || result.losers.length === 0) {
+    return;
+  }
+  const winnerPoints = result.winners.map(person =>
+    L.latLng(
+      Number(person.lat),
+      Number(person.lon)
+    )
+  );
+
+  const winnerBounds = L.latLngBounds(winnerPoints);
+  const winnerCenter = winnerBounds.getCenter();
+
   let farthestWinner = result.winners[0];
-  
+
+  let farthestDistance = winnerCenter.distanceTo(
+    L.latLng(
+      Number(farthestWinner.lat),
+      Number(farthestWinner.lon)
+    )
+  );
 
   for (const person of result.winners) {
-    const currentDistance = center.distanceTo(
-      L.latLng(person.lat, person.lon)
+
+    const distance = winnerCenter.distanceTo(
+      L.latLng(
+        Number(person.lat),
+        Number(person.lon)
+      )
     );
 
-    const farthestDistance = center.distanceTo(
-      L.latLng(farthestWinner.lat, farthestWinner.lon)
-    );
-
-    if (currentDistance > farthestDistance) {
+    if (distance > farthestDistance) {
+      farthestDistance = distance;
       farthestWinner = person;
-      console.log(farthestWinner);
     }
   }
 
@@ -188,24 +207,91 @@ export const dPop = (result, map) => {
     }
   }
 
-  L.marker([farthestWinner.lat, farthestWinner.lon])
+  L.marker([
+    Number(farthestWinner.lat),
+    Number(farthestWinner.lon)
+  ])
     .bindPopup(`
-      <b>Winner</b><br>
+      <b>Farthest Winner</b><br>
       Name: ${farthestWinner.fname} ${farthestWinner.lname}<br>
       Age: ${farthestWinner.age}<br>
       Gender: ${farthestWinner.gender}
-    `).addTo(map)
+    `)
+    .addTo(map)
     .openPopup();
 
-  L.marker([youngestLoser.lat, youngestLoser.lon])
-    .addTo(map)
+
+  L.marker([
+    Number(youngestLoser.lat),
+    Number(youngestLoser.lon)
+  ])
     .bindPopup(`
-      <b>Loser</b><br>
+      <b>Youngest Loser</b><br>
       Name: ${youngestLoser.fname} ${youngestLoser.lname}<br>
       Age: ${youngestLoser.age}<br>
       Gender: ${youngestLoser.gender}
-    `);
-}
+    `)
+    .addTo(map);
+
+  const resultsDiv = document.getElementById("results");
+
+  resultsDiv.innerHTML = `
+    <div class="result-section winners-section">
+      <h2>Winners</h2>
+
+      ${result.winners.map(person => `
+        <div class="person ${
+          person === farthestWinner ? "highlight-winner" : ""
+        }">
+
+          <strong class="person-name">
+            ${person.fname} ${person.lname}
+          </strong>
+
+          <span>Age: ${person.age}</span>
+          <span>Gender: ${person.gender}</span>
+
+          ${
+            person === farthestWinner
+              ? `<strong class="highlight-label">
+                   ⭐ Farthest Winner
+                 </strong>`
+              : ""
+          }
+
+        </div>
+      `).join("")}
+    </div>
+
+
+    <div class="result-section losers-section">
+      <h2>Losers</h2>
+
+      ${result.losers.map(person => `
+        <div class="person ${
+          person === youngestLoser ? "highlight-loser" : ""
+        }">
+
+          <strong class="person-name">
+            ${person.fname} ${person.lname}
+          </strong>
+
+          <span>Age: ${person.age}</span>
+          <span>Gender: ${person.gender}</span>
+
+          ${
+            person === youngestLoser
+              ? `<strong class="highlight-label">
+                   ⭐ Youngest Loser
+                 </strong>`
+              : ""
+          }
+
+        </div>
+      `).join("")}
+    </div>
+  `;
+};
 draw.addEventListener("click", (e) => {
     mapElement.style.display = "block";
     form.style.display = "none";
